@@ -16,16 +16,15 @@ public class InstructorStudentService {
     @Autowired
     private StudentService studentService;
     @Autowired
-    private CourseService courseService;
+    private CourseServiceImp courseServiceImp;
 
     public ResponseEntity<?> putDegreeForStudentInSpecificCourseByInstructor(int studentId, int courseId, double degree) {
         Student student = studentService.getStudentById(studentId);
-        if (student == null)
-            return new ResponseEntity<>("There Are No Student With Id  " + studentId, HttpStatus.NOT_FOUND);
-        Course course = courseService.getById(courseId);
-        if (course == null)
-            return new ResponseEntity<>("There Are No Course With Id  " + courseId, HttpStatus.NOT_FOUND);
+
+        Course course = courseServiceImp.getById(courseId);
+
         StudentCourse studentCourse = studentCourseService.getByStudentAndCourse(student, course);
+
         studentCourse.setDegree(degree);
         return new ResponseEntity<>(studentCourseService.update(studentCourse), HttpStatus.ACCEPTED);
 

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class InstructorService {
 
@@ -21,9 +23,7 @@ public class InstructorService {
     }
 
     public ResponseEntity<?> update(Instructor instructor) {
-        if (!isExist(instructor.getId()))
-            return new ResponseEntity<>("There Are No Instructor With id = " + instructor.getId(),
-                    HttpStatus.NOT_FOUND);
+        checkIfInstructorIsExistOrThrowException(instructor.getId());
         instructor.setRole("INSTRUCTOR");
         return new ResponseEntity<>(instructorRepository.save(instructor), HttpStatus.ACCEPTED);
     }
@@ -33,28 +33,26 @@ public class InstructorService {
     }
 
     public ResponseEntity<?> getCoursesForInstructor(int instructorId) {
-        Instructor instructor = instructorRepository.findById(instructorId).orElse(null);
-        if (instructor == null)
-            return new ResponseEntity<>("There Are No Instructor With id = " + instructor.getId(),
-                    HttpStatus.NOT_FOUND);
+        Instructor instructor = getById(instructorId);
         return new ResponseEntity<>(instructor.getCourses(), HttpStatus.ACCEPTED);
 
     }
 
     public ResponseEntity<?> deleteById(int instructorId) {
-        if (!isExist(instructorId))
-            return new ResponseEntity<>("There Are No Instructor With id = " + instructorId, HttpStatus.NOT_FOUND);
+
+        checkIfInstructorIsExistOrThrowException(instructorId);
         instructorRepository.deleteById(instructorId);
         return new ResponseEntity<>("Deleted Success...", HttpStatus.ACCEPTED);
 
     }
 
     public Instructor getById(int instructorId) {
-        return instructorRepository.findById(instructorId).orElse(null);
+
+        return instructorRepository.findById(instructorId).orElseThrow(() ->
+                new NoSuchElementException("There Are No Instructor With id = " + instructorId));
     }
 
-    private boolean isExist(int instructorId) {
-        Instructor instructor = instructorRepository.findById(instructorId).orElse(null);
-        return (instructor == null) ? false : true;
+    private void checkIfInstructorIsExistOrThrowException(int instructorId) {
+        getById(instructorId);
     }
 }

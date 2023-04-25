@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class StudentService {
 
@@ -19,15 +21,13 @@ public class StudentService {
     }
 
     public ResponseEntity<?> update(Student student) {
-        if (!isExist(student.getId()))
-            return new ResponseEntity<>("There Are No Student With id = " + student.getId(), HttpStatus.NOT_FOUND);
+        checkIfStudentIsExistOrThrowException(student.getId());
         student.setRole("STUDENT");
         return new ResponseEntity<>(studentRepository.save(student), HttpStatus.ACCEPTED);
     }
 
     public ResponseEntity<?> deleteById(int studentId) {
-        if (!isExist(studentId))
-            return new ResponseEntity<>("There Are No Student With id = " + studentId, HttpStatus.NOT_FOUND);
+        checkIfStudentIsExistOrThrowException(studentId);
         studentRepository.deleteById(studentId);
         return new ResponseEntity<>("Deleted Success...", HttpStatus.ACCEPTED);
     }
@@ -38,12 +38,12 @@ public class StudentService {
     }
 
     public Student getStudentById(int studentId) {
-        return studentRepository.findById(studentId).orElse(null);
+        return studentRepository.findById(studentId).orElseThrow(() ->
+                new NoSuchElementException("There Are No Student With Id = " + studentId));
     }
 
-    private boolean isExist(int studentId) {
-        Student student = studentRepository.findById(studentId).orElse(null);
-        return (student == null) ? false : true;
+    private void checkIfStudentIsExistOrThrowException(int studentId) {
+        getStudentById(studentId);
     }
 
 }

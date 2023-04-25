@@ -1,7 +1,7 @@
 package com.learning.controller;
 
 import com.learning.model.Course;
-import com.learning.service.CourseService;
+import com.learning.service.CourseServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,26 +11,26 @@ import org.springframework.web.bind.annotation.*;
 public class CourseController {
 
     @Autowired
-    private CourseService courseService;
+    private CourseServiceImp courseServiceImp;
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
-        return courseService.getAll();
+        return courseServiceImp.getAllCourses();
     }
 
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody Course course) {
-        return courseService.add(course);
+        return courseServiceImp.addCourse(course);
     }
 
     @PutMapping("/update")
     public ResponseEntity<?> update(@RequestBody Course course) {
-        return courseService.update(course);
+        return courseServiceImp.updateCourse(course);
     }
 
     @DeleteMapping("/deleteById/{courseId}")
     public ResponseEntity<?> deleteById(@PathVariable int courseId) {
-        return courseService.deleteById(courseId);
+        return courseServiceImp.deleteCourseById(courseId);
     }
 
 }

@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@MappedSuperclass
+@MappedSuperclass// to take id.
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -20,11 +20,16 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     private String name;
+
     private String email;
+
     private String password;
     private String phone;
 
     private String role;
     private boolean status;
+
+
 }

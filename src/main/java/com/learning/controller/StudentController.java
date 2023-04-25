@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/students")
 public class StudentController {
 
+
     @Autowired
     private StudentService studentService;
     @Autowired
@@ -21,7 +22,7 @@ public class StudentController {
         return studentService.register(student);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping ("/getAll")
     public ResponseEntity<?> getAll() {
         return studentService.getAll();
     }
@@ -33,17 +34,8 @@ public class StudentController {
 
     @DeleteMapping("/deleteById/{studentId}")
     public ResponseEntity<?> deleteById(@PathVariable int studentId) {
+
         return studentService.deleteById(studentId);
-    }
-
-    @GetMapping("/registerInCourse/{studentId}/course/{courseId}")
-    public ResponseEntity<?> registerInCourse(@PathVariable int studentId, @PathVariable int courseId) {
-        return studentCourseService.registerStudentToCourse(studentId, courseId);
-    }
-
-    @GetMapping("/getAllCourseForStudentByStudentId/{studentId}")
-    public ResponseEntity<?> getAllCourseForStudentByStudentId(@PathVariable int studentId) {
-        return studentCourseService.getStudentsForCourseByCourseId(studentId);
     }
 
 }

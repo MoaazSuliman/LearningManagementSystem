@@ -8,6 +8,7 @@ import java.util.List;
 @Entity
 public class Student extends Person {
 
-    @ManyToMany
-    private List<Course> courses;
+//    @ManyToMany
+//    private List<Course> courses;
+
 }
